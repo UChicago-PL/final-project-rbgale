@@ -1,0 +1,3 @@
+https://en.wikipedia.org/wiki/SAT_solver
+    Consulted for the project proposal and for finding algorithms to implement.
+

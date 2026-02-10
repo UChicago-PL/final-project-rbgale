@@ -1,0 +1,97 @@
+SAT Solver - Richard Gale
+-------------------------
+
+-- Overview --
+
+I plan to make a program that solves boolean satisfiability instances: given a
+boolean formula (an expression made of boolean variables combined with AND, OR,
+and NOT operations), determine whether there exist assignments of true/false to
+the variables for which the formula evaluates to true.
+
+At the lowest level, I will develop a solver which takes formulas in conjunctive
+normal form (CNF)--the conjunction (AND) of disjunctions (OR) of literals
+(boolean variables or their negations)--and either outputs a valid configuration
+or determines that one does not exist.
+
+At a higher level (motivated by the real-world use cases of SAT solvers), the
+program will take in more abstract problems as input (e.g., sudoku, n queens, or
+graph coloring). The input will then be translated into CNF and handled using
+the solver described above.
+
+
+
+-- Milestones --
+
+Easy:
+
+The first milestone will focus only on the CNF solver. In particular, this will
+just be a naive backtracking solver using recursion, similar in approach to a
+standard sudoku solver. It will be based on the Davis–Putnam–Logemann–Loveland
+(DPLL) algorithm. It should have hard-coded encoders for sudoku and n queens.
+
+
+Medium:
+
+The second milestone will largely involve rewriting the implementation to use
+mutable state, rather than a pure approach.
+
+Additionally, rather than hard coding the CNF formula for each type of problem
+(sudoku or n queens, for example), I will make a small collection of primitives
+that abstract away the technical level (conjunctions/disjunctions/literals, and
+keeping track of variable IDs) into more natural constraints (e.g., a constraint
+which asserts that exactly one variable in a group is true).
+
+
+Challenge:
+
+One natural extension would be to use a modern SAT-solving algorithm:
+conflict-driven clause learning (CDCL). This approach modifies the DPLL
+algorithm to analyze why conflicts occur when the solver reaches a dead end and
+learns a new clause that prevents the same mistake, rather than just
+backtracking a level.
+
+On the input side, I could support many different problem input formats and
+develop translators from these problems to CNF. For example, I could support
+arbitrary propositional logic formulas and convert them to conjunctive normal
+form.
+
+I could also prove unsatisfiability: when the input formula is satisfiable, it
+can be easily verified that the solution the program provides is correct by
+plugging it into the formula; but when the program determines no such solution
+exists, we must trust that the solver didn't miss any solutions. So, I could
+output the steps the solver took to reach its final answer (output which clauses
+were combined, which new clauses were learned, and what the final contradiction
+is) to prove that the problem is indeed unsatisfiable.
+
+
+
+-- Inspiration --
+
+I am unsure from the instructions whether we should document our inspiration for
+our project ideas, so I have included this section just in case.
+
+I am generally interested in learning about NP-Complete and NP-Hard problems and
+I am currently taking a mathematical logic course, so SAT was a natural choice
+that combines the two.
+
+As for why I chose this problem for a functional programming course, I saw
+mutable state as one of the advanced topics listed on the assignment page, and
+figured it would be a fun challenge to implement this recursive algorithm with
+mutable state, as a pure approach would not scale well. Unfortunately, the
+chapter on mutable state in Professor Kurtz's book is currently unwritten, but
+the Haskell documentation seems fairly extensive.
+
+
+
+-- Resources --
+
+Although I was vaguely familiar with the Boolean satisfiability problem, I
+consulted several resources in coming up with this proposal (and expect to rely
+on many more throughout the project, as I will be implementing known
+algorithms). I have kept track of all sources in the resources.txt file.
+
+I anticipate that the project will require mutable state for the optimized
+solver, parser combinators for the CNF formulas (and for higher-level input,
+depending on the direction of the project), and monad transformers for layered
+error handling.
+
