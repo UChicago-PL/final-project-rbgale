@@ -1,12 +1,20 @@
-module Types where
+module Types (
+    Variable,
+    Literal(..),
+    Clause,
+    Formula,
+    Assignment,
+    Problem(..),
+    SudokuGrid
+) where
 
 import qualified Data.Map.Strict as M
 
 type Variable = Int
-data Literal  = Pos Variable | Neg Variable
+data Literal = Pos Variable | Neg Variable
     deriving (Show, Eq, Ord)
-type Clause   = [Literal]
-type Formula  = [Clause]
+type Clause = [Literal]
+type Formula = [Clause]
 type Assignment = M.Map Variable Bool
 
 data Problem = Problem {

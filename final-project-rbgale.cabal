@@ -16,6 +16,7 @@ library
     hs-source-dirs: src
     exposed-modules:
         Types
+        Parser.Common
         Parser.DIMACS
         Parser.Sudoku
         Encoder.Sudoku

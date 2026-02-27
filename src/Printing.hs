@@ -1,4 +1,4 @@
-module Printing where
+module Printing (printAssignment, printGrid) where
 
 import Types (Assignment, SudokuGrid)
 

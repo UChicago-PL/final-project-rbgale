@@ -2,7 +2,6 @@ module Main where
 
 import System.Environment (getArgs)
 import System.FilePath (takeExtension)
-
 import Types (Problem(..))
 import Parser.DIMACS (parseDIMACS)
 import Parser.Sudoku (parseSudoku)
