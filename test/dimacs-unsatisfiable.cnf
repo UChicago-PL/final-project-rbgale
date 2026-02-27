@@ -1,0 +1,7 @@
+c The first two clauses require x1 is true
+c The last two require x1 is false
+p cnf 2 4
+1 2 0
+1 -2 0
+-1 2 0
+-1 -2 0

@@ -1,0 +1,30 @@
+cabal-version:      3.0
+name:               final-project-rbgale
+version:            0.1.0.0
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Richard Gale
+maintainer:         rgale129@gmail.com
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+library
+    build-depends: containers ^>=0.8, megaparsec ^>=9.7, base >=4.18 && <5
+    hs-source-dirs: src
+    exposed-modules:
+        Types
+        Parser.DIMACS
+        Parser.Sudoku
+        Encoder.Sudoku
+        Solver
+        Printing
+
+executable sat-solver
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    final-project-rbgale, filepath ^>=1.5.4.0, base >=4.18 && <5
+    hs-source-dirs:   app
+    default-language: GHC2024
