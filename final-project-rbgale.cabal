@@ -12,8 +12,9 @@ common warnings
     ghc-options: -Wall
 
 library
-    build-depends: containers ^>=0.8, megaparsec ^>=9.7, base >=4.18 && <5
-    hs-source-dirs: src
+    import:           warnings
+    build-depends:    containers ^>=0.8, megaparsec ^>=9.7, base >=4.18 && <5
+    hs-source-dirs:   src
     exposed-modules:
         Types
         Parser.Common
@@ -22,6 +23,7 @@ library
         Encoder.Sudoku
         Solver
         Printing
+    default-language: GHC2024
 
 executable sat-solver
     import:           warnings

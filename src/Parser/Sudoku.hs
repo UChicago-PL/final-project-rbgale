@@ -19,8 +19,8 @@ grid = count 9 row <* eof
 toSudokuGrid :: [[Maybe Int]] -> SudokuGrid
 toSudokuGrid rows = M.fromList [
     ((r, c), d) |
-    (r, row) <- zip [0..] rows,
-    (c, Just d) <- zip [0..] row]
+    (r, rowCells) <- zip [0..] rows,
+    (c, Just d) <- zip [0..] rowCells]
 
 parseSudoku :: String -> String -> Either String SudokuGrid
 parseSudoku filename input = toSudokuGrid <$> parsePretty '#' grid filename input

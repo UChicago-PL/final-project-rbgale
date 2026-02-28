@@ -1,0 +1,10 @@
+Progress Update
+---------------
+
+So far, I've completed most of the easy goals, besides the n queens encoder. I
+will probably try to rewrite the solver using the ST monad for mutable state. If
+I do encode n queens, I will try to abstract away some key primitives instead of
+manually allocating variables and handling clauses, as mentioned in the
+proposal. Based on the feedback on Gradescope, it seems the easy goals I've
+completed are sufficient, but I'll try to implement some of the features above
+if I have time.

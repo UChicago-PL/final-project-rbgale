@@ -1,3 +1,8 @@
 https://en.wikipedia.org/wiki/SAT_solver
     Consulted for the project proposal and for finding algorithms to implement.
 
+https://www.youtube.com/watch?v=ENHKXZg-a4c
+    Consulted for DPLL algorithm information
+
+https://en.wikipedia.org/wiki/DPLL_algorithm
+    Consulted for DPLL algorithm information
