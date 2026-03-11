@@ -1,4 +1,4 @@
-module Solver (solve) where
+module Solver.Pure (solve) where
 
 import qualified Data.Map.Strict as M
 import Data.List (find)

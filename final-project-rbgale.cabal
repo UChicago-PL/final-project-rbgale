@@ -21,7 +21,8 @@ library
         Parser.DIMACS
         Parser.Sudoku
         Encoder.Sudoku
-        Solver
+        Solver.Pure
+        Solver.Mutable
         Printing
     default-language: GHC2024
 

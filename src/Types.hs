@@ -5,7 +5,8 @@ module Types (
     Formula,
     Assignment,
     Problem(..),
-    SudokuGrid
+    SudokuGrid,
+    Solve
 ) where
 
 import qualified Data.Map.Strict as M
@@ -26,3 +27,5 @@ data Problem = Problem {
 -- Keys are (row, col) pairs with 0-indexing; entries are 1-9 and empty squares
 -- are not stored
 type SudokuGrid = M.Map (Int, Int) Int
+
+type Solve = Int -> Formula -> Maybe Assignment
