@@ -6,3 +6,11 @@ https://www.youtube.com/watch?v=ENHKXZg-a4c
 
 https://en.wikipedia.org/wiki/DPLL_algorithm
     Consulted for DPLL algorithm information
+
+https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Control-Monad-ST.html
+https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Data-STRef.html
+https://hackage.haskell.org/package/array-0.5.8.0/docs/Data-Array-ST.html
+    Consulted for mutable state
+
+https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html
+    Borrowed from for more complex test cases
