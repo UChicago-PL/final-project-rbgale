@@ -41,7 +41,9 @@ solveSudoku options filename input = case parseSudoku filename input of
     Right grid -> let (problem, decoder) = encodeSudoku grid in
         case solver options (numVars problem) (formula problem) of
             Nothing -> putStrLn "No solution."
-            Just assignment -> putStrLn $ printGrid $ decoder assignment
+            Just assignment -> do
+                putStrLn $ printGrid $ decoder assignment
+                verifyIf options assignment (formula problem)
 
 verifyIf :: Options -> Assignment -> Formula -> IO ()
 verifyIf options assignment formula = if shouldVerify options then

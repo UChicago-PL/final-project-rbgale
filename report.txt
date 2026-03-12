@@ -1,0 +1,145 @@
+SAT Solver - Richard Gale
+-------------------------
+
+-- Overview --
+
+This project is a boolean satisfiability solver. Given a boolean formula (which
+is an expression made of boolean variables combined with AND, OR, and NOT
+operations), it determines whether there exist assignments of true/false to the
+variables for which the formula evaluates to true.
+
+The SAT problem is significant because it was the first problem proven to be
+NP-complete, and other problems in NP are often reduced to it since, despite
+being computationally hard, it can often be solved quite efficiently in
+practice.
+
+At the lowest level, this solver operates on formulas in conjunctive normal
+form: the conjunction (logical AND) of disjunctions (logical ORs) of literals
+(boolean variables or their negations). It either outputs a satisfying
+assignment or determines that none exists.
+
+At a higher level, the program accepts Sudoku puzzles as input, translates them
+into CNF, solves them, and translates the solution back into a solved grid. The
+solver also reads DIMACS CNF files, a standard format for SAT problems. This
+also turned out to be convenient for finding more complicated test cases online,
+rather than having to create another program just to produce them (I cited these
+additional tests and all other resources in the resources.txt file).
+
+The project includes two solver implementations: a pure functional solver, which
+was the original solver I wrote, and a mutable-state solver using the ST monad,
+which was an optimization. Both implement the DPLL algorithm. I also added a
+verification module to check the correctness of outputted solutions by
+plugging the assignment into the original formula.
+
+
+-- Milestones Completed --
+
+Easy: The pure DPLL solver, DIMACS parser, Sudoku parser, hardcoded Sudoku
+encoding and decoding, and pretty-printing for assignments and Sudoku grids. I
+had also considered an n queens encoder/decoder (it is another popular
+NP-complete problem), but the feedback I received on my proposal told me the
+sudoku solver would be sufficient.
+
+Medium: The mutable state solver using the ST monad, with the formula kept
+immutable and clauses evaluated by lookup rather than copying. The CLI supports
+switching between the pure and mutable solvers using flags. A verification
+module checks that solutions are correct.
+
+The constraint DSL described in the proposal was not implemented, and so the
+Sudoku encoder is still hardcoded. I wanted to implement this or some other
+challenge goal, but the mutable state ended up taking longer than anticipated to
+implement.
+
+
+-- Project Organization --
+
+The project is a Cabal package with a library in src/ and an executable in app/:
+
+src/Types.hs:
+Contains core data types: Variable, Literal, Clause, Formula, Assignment,
+Problem, SudokuGrid, and the Solve type alias used to abstract over solver
+implementations.
+
+src/Solver/Pure.hs:
+Pure functional version of the DPLL solver which copies and filters the formula
+on each assignment. It uses the Alternative instance on Maybe for backtracking.
+
+src/Solver/Mutable.hs:
+Mutable-state DPLL solver using the ST monad. It maintains a mutable assignment
+array and a backtracking trail, evaluating clauses by looking up variable values
+rather than filtering the formula. The key functions are evalClause, which
+determines a clause's status and detects unit clauses; scanFormula, which finds
+the first unit clause or conflict; and chooseVariable, which picks an unassigned
+variable from an unsatisfied clause.
+
+src/Parser/Common.hs:
+Shared parser functions and types; it defines the Parser type, Megaparsec with
+Void and String, and a parsePretty wrapper that strips comment lines and blank
+lines before parsing.
+
+src/Parser/DIMACS.hs:
+Parses the DIMACS CNF format. It handles the problem line, clause lines
+terminated by 0, comment lines (which start with c), and the trailing %
+character found in SATLIB benchmark files (I'm not sure why they have this, as
+it doesn't seem to follow the standard DIMACS format).
+
+src/Parser/Sudoku.hs:
+Parses a simple Sudoku text format of 9 lines of 9 characters, with digits 1-9
+and dots for empty cells; comment lines are marked by #.
+
+src/Encoder/Sudoku.hs:
+Encodes a Sudoku grid as a CNF formula, using 729 variables (one per row/column/
+digit combination). It also provides a decoder that maps a satisfying assignment
+back to a solved grid.
+
+src/Printing.hs:
+Pretty prints outputted solutions to make the variable assignments and Sudoku
+grids readable.
+
+src/Verify.hs:
+Checks that every clause in the formula has at least one true literal under the
+given assignment.
+
+app/Main.hs:
+Entry point, which parses flags --pure, --mutable, and --verify, and handles
+input based on its file extension: .cnf for DIMACS, .sdk for Sudoku.
+
+compare.py:
+Benchmark script that runs both solvers on some of the DIMACS files from SATLIB,
+timing both and verifying their correctness.
+
+test/:
+Contains some DIMACS files I wrote (one satisfiable and one unsatisfiable
+problem), a Sudoku puzzle, and a set of 1000 random SAT instances from SATLIB,
+for longer testing to see differences in the speed of the pure and mutable
+solvers.
+
+
+-- How to Use --
+
+Run: cabal run sat-solver -- [--pure | --mutable] [--verify] <filename>
+The default solver is --mutable; the --verify flag checks the solution after
+solving.
+
+Examples:
+cabal run sat-solver -- --pure --verify test/uf100-430/uf100-01.cnf
+cabal run sat-solver -- test/sudoku.sdk
+  
+For benchmarking, run: python3 compare.py <filename> <integer>
+
+
+-- Advanced Topics Used --
+
+Mutable state (ST monad): The mutable solver uses STArray for the variable
+assignment and STRef for the backtracking trail, running entirely within the ST
+monad. The external interface remains pure: solve returns Maybe Assignment using
+runST.
+
+Parser combinators (Megaparsec): Used for both the DIMACS parser and the Sudoku
+parser, with a shared comment-stripping layer. This was probably overkill, but I
+wanted to get some practice with Megaparsec.
+
+
+-- Resources --
+
+All resources consulted during the project are listed in resources.txt.
