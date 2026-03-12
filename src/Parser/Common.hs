@@ -5,12 +5,12 @@ import Data.Void (Void)
 
 type Parser = Parsec Void String
 
-stripCommentsAndBlanks :: Char -> String -> String
+stripCommentsAndBlanks :: String -> String -> String
 stripCommentsAndBlanks marker = unlines . filter notComment . lines where
-    notComment (c:_) = c /= marker
+    notComment (c:_) = c `notElem` marker
     notComment _ = False
 
-parsePretty :: Char -> Parser a -> String -> String -> Either String a
+parsePretty :: String -> Parser a -> String -> String -> Either String a
 parsePretty marker p filename input =
     case parse p filename (stripCommentsAndBlanks marker input) of
         Left err -> Left (errorBundlePretty err)

@@ -1,6 +1,6 @@
 module Parser.DIMACS (parseDIMACS) where
 
-import Text.Megaparsec (many, some, MonadParsec(eof, try))
+import Text.Megaparsec (many, some, MonadParsec(eof, try), optional)
 import Text.Megaparsec.Char (string, char, space)
 import qualified Text.Megaparsec.Char.Lexer as L
 import Parser.Common (Parser, parsePretty)
@@ -41,9 +41,10 @@ dimacs = do
     space
     (numVars, numClauses) <- problemLine
     clauses <- many clause
+    _ <- optional (lexeme (char '0'))
     eof
     pure $ Problem {numVars = numVars, numClauses = numClauses, formula = clauses}
 
 -- file name only needed for error messages
 parseDIMACS :: String -> String -> Either String Problem
-parseDIMACS = parsePretty 'c' dimacs
+parseDIMACS = parsePretty "c%" dimacs

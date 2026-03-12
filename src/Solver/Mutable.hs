@@ -57,14 +57,26 @@ scanFormula st = go where
                 Just lit -> pure (UnitFound lit)
                 Nothing -> go clauses
 
-chooseVariable :: SolverState s -> Int -> ST s (Maybe Variable)
-chooseVariable st n = go 1 where
-    go var | var > n = pure Nothing
-    go var = do
-        val <- readArray (assignments st) var
+chooseVariable :: SolverState s -> Formula -> ST s (Maybe Variable)
+chooseVariable st = go where
+    go [] = pure Nothing
+    go (clause:clauses) = do
+        (status, mLit) <- evalClause st clause
+        case status of
+            Just True  -> go clauses
+            Just False -> go clauses
+            Nothing -> case mLit of
+                Just (Pos var) -> pure (Just var)
+                Just (Neg var) -> pure (Just var)
+                Nothing        -> findUnassigned clause clauses
+    findUnassigned [] clauses = go clauses
+    findUnassigned (lit:lits) clauses = do
+        val <- literalValue st lit
         case val of
-            Nothing -> pure (Just var)
-            Just _  -> go (var + 1)
+            Nothing -> pure (Just (litVar lit))
+            _       -> findUnassigned lits clauses
+    litVar (Pos v) = v
+    litVar (Neg v) = v
 
 modifyTrail :: SolverState s -> Variable -> ST s ()
 modifyTrail st var = readSTRef (trail st) >>= writeSTRef (trail st) . (var :)
@@ -97,7 +109,7 @@ dpll st formula n = do
             assignLiteral st lit
             dpll st formula n
         NothingFound -> do
-            mVar <- chooseVariable st n
+            mVar <- chooseVariable st formula
             case mVar of
                 Nothing -> pure True
                 Just var -> do

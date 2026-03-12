@@ -23,4 +23,4 @@ toSudokuGrid rows = M.fromList [
     (c, Just d) <- zip [0..] rowCells]
 
 parseSudoku :: String -> String -> Either String SudokuGrid
-parseSudoku filename input = toSudokuGrid <$> parsePretty '#' grid filename input
+parseSudoku filename input = toSudokuGrid <$> parsePretty "#" grid filename input
